@@ -1,2 +1,2 @@
-print("My name is mansi")
-print("i dont want to learn github")
+print("My name is Nilaksh")
+print("I want to learn github")
