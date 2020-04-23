@@ -1,64 +1,23 @@
-import struct, random, string
+# Program to display the Fibonacci sequence up to n-th term
 
-# C long variables are different sizes on 32-bit and 64-bit machines,
-# so we have to measure how big they are on the machine where this is running.
-LONG_SIZE = struct.calcsize('L')
-is_64_bit = (LONG_SIZE == 8)
+nterms = int(input("How many terms? "))
 
-def get(filename):
-    "Select a random quotation, using a pregenerated .dat file"
+# first two terms
+n1, n2 = 0, 1
+count = 0
 
-    # First, we open the .dat file, and read the header information.
-    # The C structure containing this info looks like:
-    ## typedef struct {                         /* information table */
-    ## #define  VERSION         1
-    ##  unsigned long   str_version;            /* version number */
-    ##  unsigned long   str_numstr;             /* # of strings in the file */
-    ##  unsigned long   str_longlen;            /* length of longest string */
-    ##  unsigned long   str_shortlen;           /* length of shortest string */
-    ## #define  STR_RANDOM      0x1             /* randomized pointers */
-    ## #define  STR_ORDERED     0x2             /* ordered pointers */
-    ## #define  STR_ROTATED     0x4             /* rot-13'd text */
-    ##  unsigned long   str_flags;              /* bit field for flags */
-    ##  unsigned char   stuff[4];               /* long aligned space */
-    ## #define  str_delim       stuff[0]        /* delimiting character */
-    ## } STRFILE;
-
-    datfile = open(filename+'.dat', 'r')
-    data = datfile.read(5 * LONG_SIZE)
-    if is_64_bit:
-        v1, v2, n1, n2, l1, l2, s1, s2, f1, f2 = struct.unpack('!10L', data)
-      
-    else:
-        version, numstr, longlen, shortlen, flags = struct.unpack('5l', data)
-
-    delimiter = datfile.read(1)
-    datfile.read(3)                     # Throw away padding bytes
-    if is_64_bit: datfile.read(4)       # 64-bit machines align to 8 bytes
-
-    # Pick a random number
-    r = random.randint(0, numstr)
-    datfile.seek(LONG_SIZE * r, 1)      # Seek to the chosen pointer
-    data = datfile.read(LONG_SIZE * 2)
-
-    if is_64_bit:
-        s1, s2, e1, e2 = struct.unpack('!4L', data)
-        start, end = s1 + (s2 << 32), e1 + (e2 << 32)
-    else:
-        start, end = struct.unpack('!ll', data)
-    datfile.close()
-
-    file = open(filename, 'r')
-    file.seek(start)
-    quotation = file.read(end-start)
-    L=string.split(quotation, '\n')
-    while string.strip(L[-1]) == delimiter or string.strip(L[-1]) == "":
-        L=L[:-1]
-    return string.join(L, '\n')
-
-if __name__ == '__main__':
-    import sys
-    if len(sys.argv) == 1:
-        print ('Usage: fortune.py <filename>')
-        sys.exit()
-    print (get(sys.argv[1]))
+# check if the number of terms is valid
+if nterms <= 0:
+   print("Please enter a positive integer")
+elif nterms == 1:
+   print("Fibonacci sequence upto",nterms,":")
+   print(n1)
+else:
+   print("Fibonacci sequence:")
+   while count < nterms:
+       print(n1)
+       nth = n1 + n2
+       # update values
+       n1 = n2
+       n2 = nth
+       count += 1
