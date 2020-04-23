@@ -1,23 +1,23 @@
-# Program to display the Fibonacci sequence up to n-th term
+# Program to add two matrices using nested loop
 
-nterms = int(input("How many terms? "))
+X = [[12,7,3],
+    [4 ,5,6],
+    [7 ,8,9]]
 
-# first two terms
-n1, n2 = 0, 1
-count = 0
+Y = [[5,8,1],
+    [6,7,3],
+    [4,5,9]]
 
-# check if the number of terms is valid
-if nterms <= 0:
-   print("Please enter a positive integer")
-elif nterms == 1:
-   print("Fibonacci sequence upto",nterms,":")
-   print(n1)
-else:
-   print("Fibonacci sequence:")
-   while count < nterms:
-       print(n1)
-       nth = n1 + n2
-       # update values
-       n1 = n2
-       n2 = nth
-       count += 1
+result = [[0,0,0],
+         [0,0,0],
+         [0,0,0]]
+
+# iterate through rows
+for i in range(len(X)):
+   # iterate through columns
+   for j in range(len(X[0])):
+       result[i][j] = X[i][j] + Y[i][j]
+
+for r in result:
+   print(r)
+
